@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Customer Churn Predictor</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0d1117;
+      min-height: 100vh;
+      color: #e0e0e0;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 2rem 1rem 4rem;
+    }
+
+    /* ── Header ── */
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+    header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: linear-gradient(90deg, #e94560, #7c3aed, #2563eb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    header p {
+      margin-top: 0.45rem;
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+    .model-badge {
+      display: inline-block;
+      margin-top: 0.7rem;
+      padding: 0.3rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(233, 69, 96, 0.12);
+      border: 1px solid rgba(233, 69, 96, 0.4);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #e94560;
+      letter-spacing: 0.5px;
+    }
+    .model-badge .dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      margin-right: 5px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ── Dashboard stats bar ── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.85rem;
+      margin-bottom: 1.8rem;
+    }
+    @media (max-width: 640px) {
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    }
+    .stat-card {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .stat-card:hover { border-color: #e94560; }
+    .stat-card .stat-value {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: #e94560;
+      line-height: 1;
+    }
+    .stat-card .stat-label {
+      margin-top: 0.35rem;
+      font-size: 0.73rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #6b7280;
+    }
+    .stat-card .stat-sub {
+      margin-top: 0.2rem;
+      font-size: 0.7rem;
+      color: #4b5563;
+    }
+
+    /* ── Error / info banners ── */
+    .error-banner {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid #ef4444;
+      border-radius: 8px;
+      padding: 0.85rem 1.1rem;
+      margin-bottom: 1.3rem;
+      font-size: 0.87rem;
+      color: #fca5a5;
+      display: none;
+    }
+
+    /* ── Main card ── */
+    .card {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 12px;
+      padding: 2rem;
+    }
+
+    /* ── Form grid ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.1rem;
+    }
+    @media (max-width: 580px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .form-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .form-group input,
+    .form-group select {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 7px;
+      padding: 0.58rem 0.82rem;
+      color: #e2e8f0;
+      font-size: 0.93rem;
+      transition: border-color 0.2s, background 0.2s;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #e94560;
+      background: rgba(233, 69, 96, 0.05);
+    }
+    .form-group select option { background: #161b22; color: #e2e8f0; }
+    .form-group .hint {
+      font-size: 0.72rem;
+      color: #4b5563;
+    }
+
+    .section-title {
+      grid-column: 1 / -1;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.1px;
+      color: #e94560;
+      border-bottom: 1px solid rgba(233, 69, 96, 0.25);
+      padding-bottom: 0.35rem;
+      margin-top: 0.4rem;
+    }
+
+    .btn-predict {
+      grid-column: 1 / -1;
+      margin-top: 0.7rem;
+      padding: 0.85rem;
+      background: linear-gradient(135deg, #e94560, #b91c1c);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn-predict:hover { opacity: 0.87; }
+    .btn-predict:active { transform: scale(0.98); }
+    .btn-predict:disabled { opacity: 0.38; cursor: not-allowed; }
+    .btn-predict.loading { opacity: 0.6; cursor: wait; }
+
+    /* ── Result card ── */
+    .result-card {
+      margin-top: 1.8rem;
+      border-radius: 12px;
+      padding: 1.7rem 2rem 1.4rem;
+      display: none;
+    }
+    .result-card.churn {
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.45);
+    }
+    .result-card.safe {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+    }
+
+    .result-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .result-label-wrap {}
+    .result-label {
+      font-size: 1.65rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+    }
+    .result-card.churn .result-label { color: #f87171; }
+    .result-card.safe  .result-label { color: #34d399; }
+    .result-prob-wrap {
+      text-align: right;
+    }
+    .result-prob-num {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .result-card.churn .result-prob-num { color: #f87171; }
+    .result-card.safe  .result-prob-num { color: #34d399; }
+    .result-prob-label {
+      font-size: 0.73rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .prob-bar-wrap {
+      margin: 1rem 0 0;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50px;
+      height: 9px;
+      overflow: hidden;
+    }
+    .prob-bar-fill {
+      height: 100%;
+      border-radius: 50px;
+      transition: width 0.7s ease;
+    }
+    .churn .prob-bar-fill { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+    .safe  .prob-bar-fill { background: linear-gradient(90deg, #10b981, #059669); }
+
+    .result-msg {
+      margin-top: 0.75rem;
+      font-size: 0.84rem;
+      color: #6b7280;
+    }
+
+    /* Risk factors section */
+    .risk-section {
+      margin-top: 1.4rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .risk-section h3 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #8b949e;
+      margin-bottom: 0.9rem;
+    }
+    .risk-chart-wrap {
+      position: relative;
+      height: 120px;
+    }
+
+    /* ── Feature importance collapsible ── */
+    .fi-section {
+      margin-top: 1.5rem;
+    }
+    .fi-toggle {
+      width: 100%;
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 10px;
+      padding: 0.85rem 1.2rem;
+      color: #8b949e;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .fi-toggle:hover { border-color: #e94560; color: #e2e8f0; }
+    .fi-toggle .arrow {
+      transition: transform 0.25s;
+      font-size: 0.7rem;
+    }
+    .fi-toggle.open .arrow { transform: rotate(180deg); }
+    .fi-body {
+      display: none;
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      padding: 1.4rem 1.4rem 1.2rem;
+    }
+    .fi-body.open { display: block; }
+    .fi-chart-wrap {
+      position: relative;
+      height: 320px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.75rem;
+      color: #30363d;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Customer Churn Predictor</h1>
+    <p>E-Commerce &nbsp;|&nbsp; XGBoost Classifier &nbsp;|&nbsp; In-Memory Training</p>
+    <div class="model-badge" id="model-badge">
+      <span class="dot"></span>Loading model…
+    </div>
+  </header>
+
+  <!-- Dashboard stats bar -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-value" id="stat-customers">—</div>
+      <div class="stat-label">Total Customers</div>
+      <div class="stat-sub">Training dataset</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-churn-rate">—</div>
+      <div class="stat-label">Churn Rate</div>
+      <div class="stat-sub">Dataset baseline</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-tenure">—</div>
+      <div class="stat-label">Avg Tenure</div>
+      <div class="stat-sub">Months</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="stat-top-risk" style="font-size:0.9rem; padding-top:0.2rem;">—</div>
+      <div class="stat-label">Top Churn Factor</div>
+      <div class="stat-sub">By feature importance</div>
+    </div>
+  </div>
+
+  <div id="error-banner" class="error-banner">
+    <strong>Error:</strong> <span id="error-text"></span>
+  </div>
+
+  <div class="card">
+    <form id="churn-form">
+      <div class="form-grid">
+
+        <div class="section-title">Customer Profile</div>
+
+        <div class="form-group">
+          <label for="tenure">Tenure (months)</label>
+          <input type="number" id="tenure" name="tenure" min="0" max="60" step="1" value="12" required />
+          <span class="hint">Months as a customer (0 – 60)</span>
+        </div>
+
+        <div class="form-group">
+          <label for="city_tier">City Tier</label>
+          <select id="city_tier" name="city_tier">
+            <option value="1">Tier 1 (Metro)</option>
+            <option value="2">Tier 2</option>
+            <option value="3" selected>Tier 3 (Small)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="gender">Gender</label>
+          <select id="gender" name="gender">
+            <option value="1">Male</option>
+            <option value="0" selected>Female</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="marital_status">Marital Status</label>
+          <select id="marital_status" name="marital_status">
+            <option value="0" selected>Single</option>
+            <option value="1">Married</option>
+            <option value="2">Divorced</option>
+          </select>
+        </div>
+
+        <div class="section-title">App &amp; Device Usage</div>
+
+        <div class="form-group">
+          <label for="hour_spend_on_app">Hours on App / Day</label>
+          <input type="number" id="hour_spend_on_app" name="hour_spend_on_app" min="0" max="5" step="0.1" value="2.0" />
+          <span class="hint">Average daily hours in the app</span>
+        </div>
+
+        <div class="form-group">
+          <label for="num_device_registered">Devices Registered</label>
+          <input type="number" id="num_device_registered" name="num_device_registered" min="1" max="10" step="1" value="3" />
+        </div>
+
+        <div class="form-group">
+          <label for="satisfaction_score">Satisfaction Score</label>
+          <select id="satisfaction_score" name="satisfaction_score">
+            <option value="1">1 – Very Low</option>
+            <option value="2">2 – Low</option>
+            <option value="3" selected>3 – Neutral</option>
+            <option value="4">4 – High</option>
+            <option value="5">5 – Very High</option>
+          </select>
+          <span class="hint">1 (very low) – 5 (very high)</span>
+        </div>
+
+        <div class="form-group">
+          <label for="num_address">Addresses on File</label>
+          <input type="number" id="num_address" name="num_address" min="1" max="20" step="1" value="3" />
+        </div>
+
+        <div class="section-title">Order Behaviour</div>
+
+        <div class="form-group">
+          <label for="warehouse_to_home">Warehouse-to-Home (km)</label>
+          <input type="number" id="warehouse_to_home" name="warehouse_to_home" min="5" max="130" step="1" value="30" />
+        </div>
+
+        <div class="form-group">
+          <label for="order_count">Orders (Last Month)</label>
+          <input type="number" id="order_count" name="order_count" min="0" max="25" step="1" value="3" />
+        </div>
+
+        <div class="form-group">
+          <label for="day_since_last_order">Days Since Last Order</label>
+          <input type="number" id="day_since_last_order" name="day_since_last_order" min="0" max="45" step="1" value="5" />
+        </div>
+
+        <div class="form-group">
+          <label for="order_amount_hike_from_last_year">Order Amount Hike (%)</label>
+          <input type="number" id="order_amount_hike_from_last_year" name="order_amount_hike_from_last_year" min="11" max="26" step="0.1" value="15.0" />
+          <span class="hint">Year-over-year % increase in order value</span>
+        </div>
+
+        <div class="form-group">
+          <label for="coupon_used">Coupons Used (Last Month)</label>
+          <input type="number" id="coupon_used" name="coupon_used" min="0" max="16" step="1" value="1" />
+        </div>
+
+        <div class="form-group">
+          <label for="cashback_amount">Cashback Amount ($)</label>
+          <input type="number" id="cashback_amount" name="cashback_amount" min="0" max="500" step="0.01" value="150.00" />
+        </div>
+
+        <div class="section-title">Support History</div>
+
+        <div class="form-group">
+          <label for="complain">Raised a Complaint</label>
+          <select id="complain" name="complain">
+            <option value="0" selected>No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+
+        <button type="submit" id="predict-btn" class="btn-predict">Predict Churn Risk</button>
+
+      </div>
+    </form>
+  </div>
+
+  <!-- Result card -->
+  <div id="result-card" class="result-card">
+    <div class="result-top">
+      <div class="result-label-wrap">
+        <div id="result-label" class="result-label"></div>
+        <p id="result-msg" style="margin-top:0.4rem; font-size:0.84rem; color:#6b7280;"></p>
+      </div>
+      <div class="result-prob-wrap">
+        <div id="result-prob-num" class="result-prob-num"></div>
+        <div class="result-prob-label">Churn Probability</div>
+      </div>
+    </div>
+    <div class="prob-bar-wrap">
+      <div id="prob-bar" class="prob-bar-fill" style="width:0%"></div>
+    </div>
+
+    <!-- Top Risk Factors mini chart -->
+    <div class="risk-section">
+      <h3>Top Risk Factors driving this prediction</h3>
+      <div class="risk-chart-wrap">
+        <canvas id="riskChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feature Importance collapsible -->
+  <div class="fi-section">
+    <button class="fi-toggle" id="fi-toggle">
+      <span>Feature Importance — Full Model</span>
+      <span class="arrow">&#9660;</span>
+    </button>
+    <div class="fi-body" id="fi-body">
+      <div class="fi-chart-wrap">
+        <canvas id="fiChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>Customer Churn Prediction &nbsp;|&nbsp; XGBoost &nbsp;|&nbsp; Flask API &nbsp;|&nbsp; Synthetic Dataset</footer>
+
+<script>
+  const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:5000' : '';
+  /* ── DOM refs ── */
+  const form        = document.getElementById('churn-form');
+  const btn         = document.getElementById('predict-btn');
+  const errorBanner = document.getElementById('error-banner');
+  const errorText   = document.getElementById('error-text');
+  const resultCard  = document.getElementById('result-card');
+  const resultLabel = document.getElementById('result-label');
+  const resultProbNum = document.getElementById('result-prob-num');
+  const probBar     = document.getElementById('prob-bar');
+  const resultMsg   = document.getElementById('result-msg');
+  const modelBadge  = document.getElementById('model-badge');
+  const fiToggle    = document.getElementById('fi-toggle');
+  const fiBody      = document.getElementById('fi-body');
+
+  /* ── Chart instances (singleton pattern) ── */
+  let riskChartInst = null;
+  let fiChartInst   = null;
+
+  /* ── Utilities ── */
+  function showError(msg) {
+    errorText.textContent = msg;
+    errorBanner.style.display = 'block';
+  }
+  function hideError() {
+    errorBanner.style.display = 'none';
+  }
+  function fmtFeature(name) {
+    return name.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  /* ── Load model status & badge ── */
+  async function loadStatus() {
+    try {
+      const res  = await fetch(API_BASE + '/api/status');
+      const data = await res.json();
+      if (data.model_ready) {
+        const acc = (data.accuracy * 100).toFixed(1);
+        const f1  = (data.f1 * 100).toFixed(1);
+        modelBadge.innerHTML = `<span class="dot"></span>Model Ready &nbsp;|&nbsp; Acc&nbsp;${acc}% &nbsp;|&nbsp; F1&nbsp;${f1}%`;
+      } else {
+        modelBadge.innerHTML = `<span style="color:#f59e0b;">Model not ready</span>`;
+        btn.disabled = true;
+      }
+    } catch {
+      modelBadge.innerHTML = `<span style="color:#ef4444;">Server unreachable</span>`;
+    }
+  }
+
+  /* ── Load dashboard stats ── */
+  async function loadDashboard() {
+    try {
+      const res  = await fetch(API_BASE + '/api/dashboard-stats');
+      const data = await res.json();
+      document.getElementById('stat-customers').textContent   = data.total_customers.toLocaleString();
+      document.getElementById('stat-churn-rate').textContent  = data.churn_rate + '%';
+      document.getElementById('stat-tenure').textContent      = data.avg_tenure + ' mo';
+      document.getElementById('stat-top-risk').textContent    = data.top_churn_reason;
+    } catch { /* silently skip */ }
+  }
+
+  /* ── Load feature importance chart ── */
+  async function loadFeatureImportance() {
+    try {
+      const res  = await fetch(API_BASE + '/api/feature-importance');
+      const data = await res.json(); // [{feature, importance}, ...]
+
+      const labels = data.map(d => fmtFeature(d.feature));
+      const values = data.map(d => parseFloat((d.importance * 100).toFixed(2)));
+
+      const ctx = document.getElementById('fiChart').getContext('2d');
+      if (fiChartInst) fiChartInst.destroy();
+      fiChartInst = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Importance (%)',
+            data: values,
+            backgroundColor: values.map((_, i) =>
+              i === 0 ? 'rgba(233,69,96,0.85)' : 'rgba(233,69,96,0.35)'
+            ),
+            borderColor: 'rgba(233,69,96,0.7)',
+            borderWidth: 1,
+            borderRadius: 4,
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${ctx.parsed.x.toFixed(2)}%`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255,255,255,0.05)' },
+              ticks: { color: '#6b7280', font: { size: 11 } },
+            },
+            y: {
+              grid: { display: false },
+              ticks: { color: '#8b949e', font: { size: 11 } },
+            }
+          }
+        }
+      });
+    } catch { /* silently skip */ }
+  }
+
+  /* ── Feature importance toggle ── */
+  fiToggle.addEventListener('click', () => {
+    const isOpen = fiBody.classList.toggle('open');
+    fiToggle.classList.toggle('open', isOpen);
+    if (isOpen && !fiChartInst) loadFeatureImportance();
+  });
+
+  /* ── Render risk factors mini bar chart ── */
+  function renderRiskChart(riskFactors) {
+    const labels = riskFactors.map(fmtFeature);
+    // Use placeholder relative scores for visualisation (1st > 2nd > 3rd)
+    const scores = [1.0, 0.65, 0.4];
+
+    const ctx = document.getElementById('riskChart').getContext('2d');
+    if (riskChartInst) riskChartInst.destroy();
+    riskChartInst = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Relative contribution',
+          data: scores,
+          backgroundColor: [
+            'rgba(233,69,96,0.85)',
+            'rgba(233,69,96,0.55)',
+            'rgba(233,69,96,0.3)',
+          ],
+          borderColor: 'rgba(233,69,96,0.7)',
+          borderWidth: 1,
+          borderRadius: 4,
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false }
+        },
+        scales: {
+          x: {
+            max: 1.2,
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { display: false },
+          },
+          y: {
+            grid: { display: false },
+            ticks: { color: '#c9d1d9', font: { size: 12, weight: '600' } },
+          }
+        }
+      }
+    });
+  }
+
+  /* ── Form submit / predict ── */
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideError();
+    resultCard.style.display = 'none';
+    btn.textContent = 'Predicting…';
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    const data = {};
+    new FormData(form).forEach((v, k) => { data[k] = parseFloat(v); });
+
+    try {
+      const res  = await fetch(API_BASE + '/api/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+
+      if (!res.ok || json.error) {
+        showError(json.error || 'Prediction failed.');
+      } else {
+        const isChurn = json.prediction === 1;
+        const pct     = (json.churn_probability * 100).toFixed(1);
+
+        resultCard.className = 'result-card ' + (isChurn ? 'churn' : 'safe');
+        resultLabel.textContent    = isChurn ? 'CHURN RISK' : 'LIKELY TO STAY';
+        resultProbNum.textContent  = pct + '%';
+        probBar.style.width        = pct + '%';
+        resultMsg.textContent      = isChurn
+          ? 'This customer shows signs of churn. Consider targeted retention offers.'
+          : 'This customer is likely to remain active. Keep engagement high!';
+
+        resultCard.style.display = 'block';
+        renderRiskChart(json.risk_factors || []);
+        resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    } catch {
+      showError('Could not reach the Flask server. Make sure app.py is running on port 5000.');
+    } finally {
+      btn.textContent = 'Predict Churn Risk';
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  });
+
+  /* ── Init ── */
+  loadStatus();
+  loadDashboard();
+</script>
+</body>
+</html>
