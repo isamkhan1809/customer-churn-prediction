@@ -68,7 +68,7 @@ def generate_dataset(seed: int = 42) -> tuple:
 
     # Logistic function to produce realistic churn probabilities (~16.8% rate)
     log_odds = (
-        -3.5
+        -0.5
         - 0.06 * tenure
         + 0.3 * city_tier
         + 0.01 * warehouse_to_home
@@ -87,7 +87,7 @@ def generate_dataset(seed: int = 42) -> tuple:
         + rng.normal(0, 0.5, N_SAMPLES)
     )
     prob = 1.0 / (1.0 + np.exp(-log_odds))
-    y = (prob > 0.5).astype(int)
+    y = (rng.random(N_SAMPLES) < prob).astype(int)
 
     return X, y
 
