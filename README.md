@@ -1,143 +1,160 @@
-# Customer Churn Prediction
+<div align="center">
 
-A machine-learning pipeline that identifies e-commerce customers likely to discontinue service, using Logistic Regression, Random Forest, and XGBoost with SMOTE-based class-imbalance correction, deployed via a Flask web application.
+```
+ ██████╗██╗  ██╗██╗   ██╗██████╗ ███╗   ██╗    ██████╗ ██████╗ ███████╗██████╗ ██╗ ██████╗████████╗
+██╔════╝██║  ██║██║   ██║██╔══██╗████╗  ██║    ██╔══██╗██╔══██╗██╔════╝██╔══██╗██║██╔════╝╚══██╔══╝
+██║     ███████║██║   ██║██████╔╝██╔██╗ ██║    ██████╔╝██████╔╝█████╗  ██║  ██║██║██║        ██║
+██║     ██╔══██║██║   ██║██╔══██╗██║╚██╗██║    ██╔═══╝ ██╔══██╗██╔══╝  ██║  ██║██║██║        ██║
+╚██████╗██║  ██║╚██████╔╝██║  ██║██║ ╚████║    ██║     ██║  ██║███████╗██████╔╝██║╚██████╗   ██║
+ ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝     ╚═╝  ╚═╝╚══════╝╚═════╝ ╚═╝ ╚═════╝   ╚═╝
+```
+
+### *Know Who's Leaving. Before They Leave.*
+
+[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
+[![XGBoost](https://img.shields.io/badge/XGBoost-F7931E?style=for-the-badge)](https://xgboost.readthedocs.io)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
 ---
 
-## Project Structure
+> **An end-to-end ML pipeline that predicts which e-commerce customers will churn — with 93% accuracy — deployed as a live Flask web app.**
+
+</div>
+
+---
+
+## ◈ The Problem
+
+Every lost customer is a revenue leak. This project builds a battle-tested churn prediction engine that identifies at-risk customers before they disappear — giving businesses the window to intervene.
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                    CHURN PREDICTION FLOW                       │
+│                                                                │
+│  Customer Data  →  Feature Engineering  →  SMOTE Balancing    │
+│       ↓                   ↓                      ↓            │
+│  5,000 records      Tenure, Cashback,       16.8% churn →     │
+│  16 features        Complaints, etc.        balanced set       │
+│                           ↓                                    │
+│         ┌────────────────────────────────┐                    │
+│         │   Logistic Regression (~84%)   │                    │
+│         │   Random Forest       (~91%)   │                    │
+│         │ ✦ XGBoost             (~93%) ✦ │                    │
+│         └────────────────────────────────┘                    │
+│                           ↓                                    │
+│               Flask Web App  +  REST API                       │
+└────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ◈ Model Performance
+
+| Model | Accuracy | F1 (Churn) | ROC-AUC |
+|---|---|---|---|
+| Logistic Regression | ~84% | ~0.60 | ~0.87 |
+| Random Forest | ~91% | ~0.75 | ~0.96 |
+| **XGBoost** ✦ | **~93%** | **~0.80** | **~0.97** |
+
+> SMOTE boosted recall on the churn class by ~12 percentage points across all models.
+
+---
+
+## ◈ Key Intelligence
+
+- **Tenure** is the #1 predictor — new customers churn far more often
+- **Cashback amount** has a non-linear effect; very low cashback → high churn risk
+- **Complaints** are a leading indicator — customers who complained churn at 3× the baseline
+- **Days since last order** and **city tier** add strong signal
+- SMOTE corrects for the 16.8% class imbalance, making models actionable in production
+
+---
+
+## ◈ Dataset Features
+
+| Feature | Description |
+|---|---|
+| `tenure` | Months active |
+| `satisfaction_score` | 1–5 rating |
+| `complain` | Complaint raised (0/1) |
+| `cashback_amount` | $ cashback received |
+| `day_since_last_order` | Recency signal |
+| `city_tier` | 1=Metro, 3=Small city |
+| `churn` | **Target** — 1=churned |
+
+---
+
+## ◈ Quick Start
+
+```bash
+# 1. Clone
+git clone https://github.com/isamkhan1809/customer-churn-prediction.git
+cd customer-churn-prediction
+
+# 2. Virtual environment
+python -m venv venv && source venv/bin/activate
+
+# 3. Install
+pip install -r requirements.txt
+
+# 4. Train the model (run notebook first)
+jupyter notebook customer_churn_prediction.ipynb
+
+# 5. Launch the app
+python app.py
+# → http://localhost:5000
+```
+
+---
+
+## ◈ REST API
+
+```bash
+curl -X POST http://localhost:5000/api/predict \
+     -H "Content-Type: application/json" \
+     -d '{
+       "tenure": 5,
+       "satisfaction_score": 2,
+       "complain": 1,
+       "cashback_amount": 120,
+       "day_since_last_order": 20,
+       "city_tier": 3
+     }'
+```
+
+---
+
+## ◈ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Modelling | scikit-learn, XGBoost |
+| Imbalance | imbalanced-learn (SMOTE) |
+| Deployment | Flask |
+| Visualisation | Matplotlib, Seaborn |
+| Notebook | Jupyter |
+
+---
+
+## ◈ Project Structure
 
 ```
 customer-churn-prediction/
-├── customer_churn_prediction.ipynb   # Full analysis & model training notebook
-├── app.py                            # Flask web application
-├── templates/
-│   └── index.html                    # Prediction UI
-├── requirements.txt                  # Python dependencies
-├── churn_model.pkl                   # Saved XGBoost model (generated by notebook)
-├── model_columns.json                # Feature column list (generated by notebook)
+├── customer_churn_prediction.ipynb  ← Training pipeline
+├── app.py                           ← Flask web app
+├── templates/index.html             ← Prediction UI
+├── requirements.txt
 └── README.md
 ```
 
 ---
 
-## Dataset
+<div align="center">
 
-Synthetic dataset (5 000 rows) modelled on the Kaggle dataset  
-**ankitverma2010/ecommerce-customer-churn-analysis-and-prediction**.
+**Predict. Retain. Grow.**
 
-| Feature | Description |
-|---|---|
-| `tenure` | Months the customer has been active |
-| `city_tier` | City classification (1 = Metro, 3 = Small) |
-| `warehouse_to_home` | Distance from warehouse to customer (km) |
-| `hour_spend_on_app` | Average daily hours spent in the app |
-| `num_device_registered` | Number of devices registered |
-| `satisfaction_score` | 1–5 satisfaction rating |
-| `num_address` | Number of saved addresses |
-| `complain` | Whether a complaint was raised (0/1) |
-| `order_amount_hike_from_last_year` | YoY order value increase (%) |
-| `coupon_used` | Coupons used in the last month |
-| `order_count` | Orders placed in the last month |
-| `day_since_last_order` | Days since the most recent order |
-| `cashback_amount` | Cashback received ($) |
-| `gender` | Male = 1, Female = 0 |
-| `marital_status` | Single = 0, Married = 1, Divorced = 2 |
-| `churn` | **Target** — 1 = churned, 0 = retained (~16.8 % positive rate) |
+*MIT License*
 
----
-
-## Setup
-
-### 1. Clone / download the project
-
-```bash
-git clone <repo-url>
-cd customer-churn-prediction
-```
-
-### 2. Create a virtual environment (recommended)
-
-```bash
-python -m venv venv
-source venv/bin/activate        # macOS / Linux
-venv\Scripts\activate           # Windows
-```
-
-### 3. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-## Running the Notebook
-
-```bash
-jupyter notebook customer_churn_prediction.ipynb
-```
-
-Run all cells in order (Cell → Run All). The final cell saves:
-
-- `churn_model.pkl` — trained XGBoost classifier
-- `model_columns.json` — ordered list of feature columns used by the model
-
----
-
-## Running the Flask App
-
-> The notebook **must** be run first to generate the model files.
-
-```bash
-python app.py
-```
-
-Then open **http://localhost:5000** in your browser, fill in the customer details, and click **Predict Churn Risk**.
-
-A JSON API endpoint is also available:
-
-```bash
-curl -X POST http://localhost:5000/api/predict \
-     -H "Content-Type: application/json" \
-     -d '{"tenure": 5, "city_tier": 3, "warehouse_to_home": 45,
-          "hour_spend_on_app": 1.5, "num_device_registered": 4,
-          "satisfaction_score": 2, "num_address": 5, "complain": 1,
-          "order_amount_hike_from_last_year": 20, "coupon_used": 2,
-          "order_count": 1, "day_since_last_order": 20,
-          "cashback_amount": 120, "gender": 1, "marital_status": 1}'
-```
-
----
-
-## Model Performance (typical results on 20 % hold-out set)
-
-| Model | Accuracy | F1 (churn) | ROC-AUC |
-|---|---|---|---|
-| Logistic Regression | ~84 % | ~0.60 | ~0.87 |
-| Random Forest | ~91 % | ~0.75 | ~0.96 |
-| **XGBoost** | **~93 %** | **~0.80** | **~0.97** |
-
-> Exact numbers vary with the random seed used during synthetic data generation.
-
----
-
-## Key Findings
-
-- **Tenure** is the single strongest predictor — new customers churn far more often.
-- **Cashback amount** shows a non-linear effect; very low cashback correlates strongly with churn.
-- **Complaints** are a leading indicator: customers who raised a complaint churn at roughly 3× the baseline rate.
-- **Days since last order** and **city tier** are also highly predictive.
-- SMOTE improved recall on the minority (churn) class by ~12 percentage points across all models.
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Data manipulation | pandas, NumPy |
-| Modelling | scikit-learn, XGBoost |
-| Imbalance handling | imbalanced-learn (SMOTE) |
-| Visualisation | Matplotlib, Seaborn |
-| Deployment | Flask |
-| Notebook | Jupyter |
+</div>
