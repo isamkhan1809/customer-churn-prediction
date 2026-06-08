@@ -11,7 +11,7 @@
 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&pause=1000&color=FF4B4B&center=true&vCenter=true&width=700&lines=Know+Who%27s+Leaving+Before+They+Leave+%F0%9F%9A%A8;XGBoost+Churn+Classifier+%E2%80%94+93%25+Accuracy;SMOTE+%7C+Random+Forest+%7C+Logistic+Regression;Deployed+as+a+Live+Flask+Web+App" alt="Typing SVG" />
 
-<img src="https://media.giphy.com/media/1Bg8pRVriaBvsJJthh/giphy.gif" width="360" />
+<img src="https://media.giphy.com/media/NGN8hRTijoR3KEB4Hq/giphy.gif" width="360" />
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
