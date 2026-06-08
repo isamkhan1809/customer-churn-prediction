@@ -11,7 +11,7 @@
 
 <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&pause=1000&color=FF4B4B&center=true&vCenter=true&width=700&lines=Know+Who%27s+Leaving+Before+They+Leave+%F0%9F%9A%A8;XGBoost+Churn+Classifier+%E2%80%94+93%25+Accuracy;SMOTE+%7C+Random+Forest+%7C+Logistic+Regression;Deployed+as+a+Live+Flask+Web+App" alt="Typing SVG" />
 
-<img src="https://media.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif" width="360" />
+<img src="https://media.giphy.com/media/l46Cy1rHbQ92uuLXa/giphy.gif" width="360" />
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
@@ -152,7 +152,8 @@ customer-churn-prediction/
 
 <br/>
 
-Built by [Isam Khan](https://github.com/isamkhan1809) &nbsp;|&nbsp;
+Working on customer analytics, ML pipelines, or retention strategies?<br/>
+Let's connect — built by <a href="https://github.com/isamkhan1809">Isam Khan</a> &nbsp;|&nbsp;
 <a href="https://linkedin.com/in/isam-khan-3a1260292"><img src="https://img.shields.io/badge/-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white&labelColor=000000"/></a>
 <a href="https://isamkhan.com"><img src="https://img.shields.io/badge/-isamkhan.com-00D9FF?style=flat-square&logo=googlechrome&logoColor=white&labelColor=000000"/></a>
 
