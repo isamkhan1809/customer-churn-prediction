@@ -1,56 +1,119 @@
 <div align="center">
 
-```
- ██████╗██╗  ██╗██╗   ██╗██████╗ ███╗   ██╗    ██████╗ ██████╗ ███████╗██████╗ ██╗ ██████╗████████╗
-██╔════╝██║  ██║██║   ██║██╔══██╗████╗  ██║    ██╔══██╗██╔══██╗██╔════╝██╔══██╗██║██╔════╝╚══██╔══╝
-██║     ███████║██║   ██║██████╔╝██╔██╗ ██║    ██████╔╝██████╔╝█████╗  ██║  ██║██║██║        ██║
-██║     ██╔══██║██║   ██║██╔══██╗██║╚██╗██║    ██╔═══╝ ██╔══██╗██╔══╝  ██║  ██║██║██║        ██║
-╚██████╗██║  ██║╚██████╔╝██║  ██║██║ ╚████║    ██║     ██║  ██║███████╗██████╔╝██║╚██████╗   ██║
- ╚═════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝   ╚═╝     ╚═╝  ╚═╝╚══════╝╚═════╝ ╚═╝ ╚═════╝   ╚═╝
-```
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,12,17&height=200&section=header&text=Churn%20Predict&fontSize=80&fontColor=fff&animation=twinkling&fontAlignY=35&desc=Know%20Who%27s%20Leaving%20%E2%80%94%20Before%20They%20Leave&descAlignY=60&descSize=20" width="100%"/>
 
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=20&pause=1000&color=FF4B4B&center=true&vCenter=true&width=700&lines=Know+Who%27s+Leaving+Before+They+Leave+%F0%9F%9A%A8;XGBoost+Churn+Classifier+%E2%80%94+93%25+Accuracy;SMOTE+%7C+Random+Forest+%7C+Logistic+Regression;Deployed+as+a+Live+Flask+Web+App" alt="Typing SVG" />
+<br/>
 
-<img src="https://media.giphy.com/media/hsurKEGhxmbbxM7Ez2/giphy.gif" width="360" />
+[![Python](https://img.shields.io/badge/Python-3.9%2B-FF4B4B?style=for-the-badge&logo=python&logoColor=white&labelColor=0D0D0D)](https://python.org)
+[![XGBoost](https://img.shields.io/badge/XGBoost-93%25%20Accuracy-FF6B35?style=for-the-badge&logoColor=white&labelColor=0D0D0D)](https://xgboost.readthedocs.io)
+[![Flask](https://img.shields.io/badge/Flask-Deployed-000000?style=for-the-badge&logo=flask&logoColor=white&labelColor=0D0D0D)](https://flask.palletsprojects.com)
+[![License](https://img.shields.io/badge/License-MIT-FF4B4B?style=for-the-badge&labelColor=0D0D0D)](LICENSE)
 
-[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
-[![XGBoost](https://img.shields.io/badge/XGBoost-F7931E?style=for-the-badge)](https://xgboost.readthedocs.io)
-[![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
+<br/>
 
-> **An end-to-end ML pipeline that predicts which e-commerce customers will churn — with 93% accuracy — deployed as a live Flask web app.**
+<a href="https://github.com/isamkhan1809/customer-churn-prediction">
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=22&pause=1000&color=FF4B4B&center=true&vCenter=true&width=700&lines=XGBoost+Churn+Classifier+%E2%80%94+93%25+Accuracy;SMOTE+%7C+Random+Forest+%7C+Logistic+Regression;Predict+Churn+Before+It+Happens;Every+Lost+Customer+Is+a+Revenue+Leak." alt="Typing SVG" />
+</a>
 
 </div>
 
 ---
 
-## ◈ The Problem
+<br/>
 
-Every lost customer is a revenue leak. This project builds a battle-tested churn prediction engine that identifies at-risk customers before they disappear — giving businesses the window to intervene.
+<div align="center">
 
 ```
-┌────────────────────────────────────────────────────────────────┐
-│                    CHURN PREDICTION FLOW                       │
-│                                                                │
-│  Customer Data  →  Feature Engineering  →  SMOTE Balancing    │
-│       ↓                   ↓                      ↓            │
-│  5,000 records      Tenure, Cashback,       16.8% churn →     │
-│  16 features        Complaints, etc.        balanced set       │
-│                           ↓                                    │
-│         ┌────────────────────────────────┐                    │
-│         │   Logistic Regression (~84%)   │                    │
-│         │   Random Forest       (~91%)   │                    │
-│         │ ✦ XGBoost             (~93%) ✦ │                    │
-│         └────────────────────────────────┘                    │
-│                           ↓                                    │
-│               Flask Web App  +  REST API                       │
-└────────────────────────────────────────────────────────────────┘
+  ╔══════════════════════════════════════════════════════════════╗
+  ║                                                              ║
+  ║   Every month, customers quietly decide to leave.           ║
+  ║   No warning. No goodbye. Just a gap in the revenue.        ║
+  ║                                                              ║
+  ║       This model sees it coming three steps ahead.          ║
+  ║                                                              ║
+  ╚══════════════════════════════════════════════════════════════╝
 ```
 
----
+</div>
 
-## ◈ Model Performance
+<br/>
+
+## `>_ The Story`
+
+> *A customer complains once and never orders again. Another quietly drifts — fewer visits, smaller baskets, longer gaps between orders. By the time the churn shows in the data, it's already happened.*
+>
+> *This project builds a machine learning pipeline that reads the early signals — tenure, cashback patterns, complaint history — and flags the customers most likely to leave before they do.*
+>
+> *93% accuracy. Deployed as a live Flask app with a REST API.*
+
+<br/>
+
+## `>_ Predictions`
+
+<table>
+<tr>
+<td width="50%">
+
+**Customer signals in:**
+```
+tenure:              5 months
+satisfaction_score:  2 / 5
+complain:            1
+cashback_amount:     $120
+day_since_last_order: 20
+city_tier:           3
+```
+
+</td>
+<td width="50%">
+
+**Churn risk out:**
+```
+🔴 HIGH RISK — 87% churn probability
+
+Top signals:
+  ↑ Complaint raised
+  ↑ Low tenure (< 6 months)
+  ↑ Low cashback amount
+  ↑ 20 days since last order
+```
+
+</td>
+</tr>
+</table>
+
+<br/>
+
+## `>_ The Pipeline`
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                   CHURN PREDICTION PIPELINE                 │
+│                                                             │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐  │
+│  │  5,000 rows  │───▶│  Feature Eng │───▶│    SMOTE     │  │
+│  │  16 features │    │  Scaling     │    │  Balancing   │  │
+│  │  16.8% churn │    │  Encoding    │    │  +12% recall │  │
+│  └──────────────┘    └──────────────┘    └──────┬───────┘  │
+│                                                 │          │
+│                           ┌─────────────────────▼───────┐  │
+│                           │  Logistic Regression  ~84%  │  │
+│                           │  Random Forest        ~91%  │  │
+│                           │  XGBoost ✦            ~93%  │  │
+│                           └─────────────────────┬───────┘  │
+│                                                 │          │
+│                           ┌─────────────────────▼───────┐  │
+│                           │     Flask Web App           │  │
+│                           │     REST API /predict       │  │
+│                           └─────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+<br/>
+
+## `>_ Model Performance`
+
+<div align="center">
 
 | Model | Accuracy | F1 (Churn) | ROC-AUC |
 |---|---|---|---|
@@ -58,57 +121,33 @@ Every lost customer is a revenue leak. This project builds a battle-tested churn
 | Random Forest | ~91% | ~0.75 | ~0.96 |
 | **XGBoost** ✦ | **~93%** | **~0.80** | **~0.97** |
 
-> SMOTE boosted recall on the churn class by ~12 percentage points across all models.
+</div>
 
----
+<br/>
 
-## ◈ Key Intelligence
-
-- **Tenure** is the #1 predictor — new customers churn far more often
-- **Cashback amount** has a non-linear effect; very low cashback → high churn risk
-- **Complaints** are a leading indicator — customers who complained churn at 3× the baseline
-- **Days since last order** and **city tier** add strong signal
-
----
-
-## ◈ Dataset Features
-
-| Feature | Description |
-|---|---|
-| `tenure` | Months active |
-| `satisfaction_score` | 1–5 rating |
-| `complain` | Complaint raised (0/1) |
-| `cashback_amount` | $ cashback received |
-| `day_since_last_order` | Recency signal |
-| `city_tier` | 1=Metro, 3=Small city |
-| `churn` | **Target** — 1=churned |
-
----
-
-## ◈ Quick Start
+## `>_ Get Running`
 
 ```bash
-# 1. Clone
+# Clone
 git clone https://github.com/isamkhan1809/customer-churn-prediction.git
 cd customer-churn-prediction
 
-# 2. Virtual environment
+# Install
 python -m venv venv && source venv/bin/activate
-
-# 3. Install
 pip install -r requirements.txt
 
-# 4. Train the model (run notebook first)
+# Train (run notebook first)
 jupyter notebook customer_churn_prediction.ipynb
 
-# 5. Launch the app
+# Launch app
 python app.py
-# → http://localhost:5000
 ```
 
----
+Open [http://localhost:5000](http://localhost:5000) — fill in customer details, get a churn prediction.
 
-## ◈ REST API
+<br/>
+
+## `>_ REST API`
 
 ```bash
 curl -X POST http://localhost:5000/api/predict \
@@ -117,44 +156,49 @@ curl -X POST http://localhost:5000/api/predict \
           "cashback_amount": 120, "day_since_last_order": 20, "city_tier": 3}'
 ```
 
----
+<br/>
 
-## ◈ Tech Stack
+## `>_ Tech Stack`
+
+<div align="center">
 
 | Layer | Technology |
 |---|---|
-| Modelling | scikit-learn, XGBoost |
-| Imbalance | imbalanced-learn (SMOTE) |
-| Deployment | Flask |
-| Visualisation | Matplotlib, Seaborn |
-| Notebook | Jupyter |
+| **Modelling** | scikit-learn, XGBoost |
+| **Imbalance** | imbalanced-learn (SMOTE) |
+| **Deployment** | Flask |
+| **Visualisation** | Matplotlib, Seaborn |
+| **Notebook** | Jupyter |
 
----
+</div>
 
-## ◈ Project Structure
+<br/>
+
+## `>_ Project Structure`
 
 ```
 customer-churn-prediction/
-├── customer_churn_prediction.ipynb  ← Training pipeline
-├── app.py                           ← Flask web app
+├── customer_churn_prediction.ipynb  ← Full training pipeline
+├── app.py                           ← Flask web app + REST API
 ├── templates/index.html             ← Prediction UI
-├── requirements.txt
-└── README.md
+└── requirements.txt
 ```
+
+<br/>
 
 ---
 
 <div align="center">
 
-**Predict. Retain. Grow.**
-
-*MIT License*
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,12,17&height=120&section=footer&animation=twinkling" width="100%"/>
 
 <br/>
 
-Working on customer analytics, ML pipelines, or retention strategies?<br/>
-Let's connect — built by <a href="https://github.com/isamkhan1809">Isam Khan</a> &nbsp;|&nbsp;
-<a href="https://linkedin.com/in/isam-khan-3a1260292"><img src="https://img.shields.io/badge/-LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white&labelColor=000000"/></a>
-<a href="https://isamkhan.com"><img src="https://img.shields.io/badge/-isamkhan.com-00D9FF?style=flat-square&logo=googlechrome&logoColor=white&labelColor=000000"/></a>
+*Predict. Retain. Grow.*
+*93% accuracy. Built with Python, XGBoost, and Flask.*
+
+<br/>
+
+[![GitHub](https://img.shields.io/badge/github-isamkhan1809-FF4B4B?style=for-the-badge&logo=github&logoColor=white&labelColor=0D0D0D)](https://github.com/isamkhan1809)
 
 </div>
